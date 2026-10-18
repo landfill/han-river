@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#182d30" />
+    <meta
+      name="description"
+      content="유람선 갑판에서 만나는 서울의 또 다른 풍경. 한강을 따라 흐르는 실시간 3D 항해."
+    />
+    <title>한강유람 · 서울의 물결을 따라서</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main id="app">
+      <canvas
+        id="scene"
+        tabindex="0"
+        aria-label="한강 유람선 3D 풍경. 방향키 또는 드래그로 둘러보세요."
+      ></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <header class="header">
+        <a class="brand" href="/" aria-label="한강유람 처음으로"
+          ><span class="brand-mark">≋</span><span>한강유람<small>HANGANG CRUISE</small></span></a
+        >
+        <div class="header-location">
+          <span class="live-dot"></span>SEOUL, SOUTH KOREA<span class="divider"></span>한강에서
+          보내는 느린 시간
+        </div>
+        <button class="icon-button" id="settings-open" aria-label="환경 설정" title="환경 설정">
+          <i data-icon="sliders"></i>
+        </button>
+      </header>
+      <section class="intro" id="intro" aria-labelledby="intro-title">
+        <div class="eyebrow"><span></span> A DIFFERENT SIDE OF SEOUL</div>
+        <h1 id="intro-title">서울을 잠시,<br /><em>물결에 맡기다.</em></h1>
+        <p>익숙한 도시가 낯선 풍경이 되는 시간.<br />한강 위, 당신만의 자리에 오르세요.</p>
+        <button class="start-button" id="start" disabled>
+          <i data-icon="arrow-up-right"></i><span>풍경을 준비하고 있어요</span
+          ><span class="button-line"></span><small>여의도에서 출발</small>
+        </button>
+        <div class="intro-meta">
+          <i data-icon="waves"></i> 여의도 · 원효대교 · 한강철교 <span>가상 관람 코스</span>
+        </div>
+      </section>
+      <div class="top-right">
+        <div class="time-switch" role="group" aria-label="시간대">
+          <button data-time="day" aria-pressed="false">
+            <i data-icon="sun"></i><span>낮</span>
+          </button>
+          <button data-time="golden" class="active" aria-pressed="true">
+            <i data-icon="sunset"></i><span>골든아워</span>
+          </button>
+          <button data-time="night" aria-pressed="false">
+            <i data-icon="moon"></i><span>야간</span>
+          </button>
+        </div>
+        <span class="weather" id="weather">해 질 녘의 한강 <span>·</span> 잔잔한 바람</span>
+      </div>
+      <aside class="scene-info" aria-label="관람 정보">
+        <span class="small-label">지금, 이 풍경</span>
+        <h2 id="landmark-name">여의도의 황금빛 윤곽</h2>
+        <p id="landmark-description">
+          강 위에서 조금 멀리 바라보면,<br />도시는 하나의 풍경이 됩니다.
+        </p>
+        <button class="text-button" id="landmark-open">
+          풍경 이야기 <i data-icon="arrow-right"></i>
+        </button>
+      </aside>
+      <div class="view-tools">
+        <div class="compass" aria-hidden="true">
+          <span>N</span>
+          <div id="compass-needle">↑</div>
+          <small>S</small>
+        </div>
+        <div class="view-switch" role="group" aria-label="갑판 관람 방향">
+          <button data-view="bow" class="active" aria-label="선수에서 바라보기" aria-pressed="true">
+            <i data-icon="navigation"></i><span>선수</span>
+          </button>
+          <button data-view="city" aria-label="도시 쪽 바라보기" aria-pressed="false">
+            <i data-icon="building"></i><span>도시</span>
+          </button>
+          <button data-view="stern" aria-label="선미에서 바라보기" aria-pressed="false">
+            <i data-icon="anchor"></i><span>선미</span>
+          </button>
+        </div>
+        <button class="round-button" id="sound" aria-label="주변 소리 켜기" aria-pressed="false">
+          <i data-icon="volume-off"></i>
+        </button>
+        <button class="round-button" id="fullscreen" aria-label="전체 화면">
+          <i data-icon="expand"></i>
+        </button>
+      </div>
+      <div class="look-hint" id="look-hint">
+        <i data-icon="mouse"></i><span>드래그해서 주변을 둘러보세요</span
+        ><span class="hint-key">← →</span>
+      </div>
+      <section class="voyage-bar" aria-label="항해 제어">
+        <button class="play-button" id="play" disabled aria-label="항해 시작">
+          <i data-icon="play"></i>
+        </button>
+        <div class="voyage-status">
+          <span class="small-label" id="voyage-state">당신을 기다리는 항해</span
+          ><strong id="current-location">여의도 선착장</strong
+          ><span id="elapsed">00:00 <span>/</span> 08:00</span>
+        </div>
+        <div class="route-track">
+          <div class="route-labels">
+            <span>여의도</span><span>원효대교</span><span>한강철교</span>
+          </div>
+          <div class="track">
+            <div id="track-progress"></div>
+            <span class="station start"></span><span class="station middle"></span
+            ><span class="station end"></span>
+            <div class="boat-marker" id="boat-marker"><i data-icon="ship"></i></div>
+          </div>
+          <div class="route-bottom">
+            <span>SEOUL RIVER JOURNEY</span><span id="distance">0.0 / 2.8 km</span>
+          </div>
+        </div>
+        <button class="route-button" id="route-open">
+          <i data-icon="map"></i><span>항로 보기</span><i data-icon="arrow-up-right"></i>
+        </button>
+      </section>
+      <footer>
+        <span>37°31′ N &nbsp; 126°56′ E <span class="footer-dot">·</span> 서울, 한강</span
+        ><span class="render-status" id="render-status">실시간 3D 풍경 <span>·</span> 준비 중</span
+        ><span>TAKE THE SCENIC ROUTE.</span>
+      </footer>
+      <div class="loading" id="loading">
+        <div class="loading-mark">≋</div>
+        <h2>한강의 빛을 담는 중</h2>
+        <p id="loading-text">물결과 도시의 풍경을 준비하고 있어요</p>
+        <div class="loading-track"><span id="loading-progress"></span></div>
+        <small>HANGANG CRUISE · SEOUL</small>
+      </div>
+      <div class="error-screen" id="error-screen" hidden>
+        <i data-icon="waves"></i>
+        <h2>풍경을 불러오지 못했어요</h2>
+        <p id="error-message"></p>
+        <button class="start-button" id="retry">다시 시도 <i data-icon="arrow-right"></i></button>
+      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <dialog id="route-dialog" aria-labelledby="route-title">
+        <button class="dialog-close" aria-label="닫기"><i data-icon="x"></i></button
+        ><span class="eyebrow">YOUR RIVER JOURNEY</span>
+        <h2 id="route-title">물길을 따라, 서울을 만나다.</h2>
+        <p class="dialog-lead">여의도에서 한강철교까지, 약 2.8km의 가상 항해</p>
+        <div class="map-wrap">
+          <svg
+            class="route-map"
+            viewBox="0 0 640 280"
+            role="img"
+            aria-label="여의도에서 원효대교를 지나 한강철교로 향하는 가상 항로"
+          >
+            <path
+              class="land"
+              d="M0 0H640V70L540 83 440 94 320 80 200 95 90 115 0 122Z M0 280V210L90 198 200 218 280 222 370 205 470 180 580 172 640 178V280Z"
+            />
+            <path class="map-bridge" d="M275 80L243 221 M478 90L450 184" />
+            <path class="map-route" d="M100 152 Q190 150 260 154 T454 137" />
+            <circle cx="100" cy="152" r="5" />
+            <circle cx="260" cy="154" r="5" />
+            <circle cx="454" cy="137" r="5" />
+            <text x="65" y="137">여의도 출발</text>
+            <text x="280" y="123">원효대교</text>
+            <text x="474" y="129">한강철교</text>
+            <text x="110" y="251" class="map-area">여의도</text>
+            <text x="400" y="50" class="map-area">용산</text>
+            <text x="345" y="168" class="map-water">한 강</text>
+            <path class="map-north" d="M590 230V205m-5 7 5-7 5 7" />
+            <text x="585" y="248" class="map-area">N</text>
+          </svg>
+        </div>
+        <div class="route-stops">
+          <div>
+            <span>01</span>
+            <h3>여의도 선착장</h3>
+            <p>도시와 물길이 만나는 시작점</p>
+          </div>
+          <div>
+            <span>02</span>
+            <h3>원효대교</h3>
+            <p>교각 사이로 달라지는 서울의 빛</p>
+          </div>
+          <div>
+            <span>03</span>
+            <h3>한강철교</h3>
+            <p>도시의 시간을 잇는 철제 실루엣</p>
+          </div>
+        </div>
+        <p class="disclaimer">
+          실제 운항 상품이 아닌 가상 관람입니다. 지형과 건축물은 서울 한강을 단순화한 절차적
+          모델이며, 정밀 측량 모델이 아닙니다.
+        </p>
+      </dialog>
+      <dialog id="landmark-dialog" aria-labelledby="story-title">
+        <button class="dialog-close" aria-label="닫기"><i data-icon="x"></i></button
+        ><span class="eyebrow">A STORY ALONG THE RIVER</span>
+        <h2 id="story-title">강 위에서 만나는 여의도</h2>
+        <p class="story-body" id="story-body">
+          서울의 금융 중심지인 여의도는 한강 위에서 또 다른 얼굴을 보여줍니다. 63빌딩의 금빛 외벽,
+          파크원의 붉은 구조물, IFC의 유리 실루엣을 천천히 찾아보세요. 해가 낮아지면 건축물의 반사와
+          물 위의 빛이 함께 바뀝니다.
+        </p>
+        <div class="story-note">
+          <i data-icon="eye"></i> 도시 시점으로 바꾸면 강변을 더 편하게 볼 수 있어요.
+        </div>
+        <button class="dialog-action" id="look-city">
+          도시 쪽 바라보기 <i data-icon="arrow-right"></i>
+        </button>
+      </dialog>
+      <dialog id="settings-dialog" aria-labelledby="settings-title">
+        <button class="dialog-close" aria-label="닫기"><i data-icon="x"></i></button
+        ><span class="eyebrow">MAKE YOURSELF COMFORTABLE</span>
+        <h2 id="settings-title">나에게 맞는 항해</h2>
+        <label class="setting-row"
+          ><span>화질<small>수면 반사 · 그림자 · 해상도</small></span
+          ><select id="quality">
+            <option value="high">높음</option>
+            <option value="balanced" selected>균형</option>
+            <option value="low">가볍게</option>
+          </select></label
+        ><label class="setting-row"
+          ><span>움직임 줄이기<small>갑판 흔들림과 시점 전환을 줄여요</small></span
+          ><input type="checkbox" id="reduce-motion" role="switch" /></label
+        ><label class="setting-row"
+          ><span>주변 소리<small>바람, 물결과 낮은 엔진 소리</small></span
+          ><input type="range" id="volume" min="0" max="100" value="35" aria-label="주변 소리 음량"
+        /></label>
+        <div class="settings-note" id="capability">그래픽 장치를 확인하고 있어요.</div>
+        <div class="settings-keys">
+          <kbd>Space</kbd> 항해 / 일시정지 <kbd>← ↑ ↓ →</kbd> 둘러보기 <kbd>Esc</kbd> 창 닫기
+        </div>
+        <button class="dialog-action" id="reset">항해 처음으로 <i data-icon="rotate"></i></button>
+      </dialog>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
