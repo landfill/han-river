@@ -2,6 +2,14 @@
 // not navigation data. Source/provenance and uncertainty: docs/GEOGRAPHY.md.
 export const DURATION = 480;
 export const ROUTE_DISTANCE = 2800;
+export const VOYAGE_SPEEDS = [0.5, 1, 1.5, 2, 4];
+export function voyageSpeed(value) {
+  const speed = Number(value);
+  return VOYAGE_SPEEDS.includes(speed) ? speed : 1;
+}
+export function advanceVoyage(elapsed, seconds, speed) {
+  return Math.min(DURATION, Math.max(0, elapsed + Math.max(0, seconds) * voyageSpeed(speed)));
+}
 export const STOPS = [
   {
     id: 'yeouido',

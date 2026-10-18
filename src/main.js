@@ -11,6 +11,8 @@ import {
   progressAt,
   nearestStop,
   formatTime,
+  voyageSpeed,
+  advanceVoyage,
 } from './route.js';
 import { icon, hydrateIcons } from './icons.js';
 
@@ -31,6 +33,7 @@ const state = {
   started: false,
   ended: false,
   elapsed: 0,
+  speed: voyageSpeed(stored.speed),
   preset: 'golden',
   view: 'city',
   quality: params.get('quality') || stored.quality || 'balanced',
@@ -48,7 +51,11 @@ const save = () => {
   try {
     localStorage.setItem(
       'hangang-preferences',
-      JSON.stringify({ quality: state.quality, reducedMotion: state.reducedMotion }),
+      JSON.stringify({
+        quality: state.quality,
+        reducedMotion: state.reducedMotion,
+        speed: state.speed,
+      }),
     );
   } catch {}
 };
@@ -97,6 +104,7 @@ window.__HAN_RIVER__ = {
     ready: state.ready,
     playing: state.playing,
     elapsed: state.elapsed,
+    speed: state.speed,
     progress: progressAt(state.elapsed),
     location: nearestStop(progressAt(state.elapsed)).name,
     position: routePoint(progressAt(state.elapsed)),
@@ -170,12 +178,14 @@ function updateHUD() {
   $('voyage-state').textContent = state.ended
     ? '물길에서 만난 서울'
     : state.playing
-      ? '천천히, 항해 중'
+      ? '물길을 따라 항해 중'
       : state.started
         ? '풍경에 잠시 머무는 중'
         : '당신을 기다리는 항해';
   $('current-location').textContent = state.ended ? '한강철교 · 관람 종료' : stop.name;
-  $('elapsed').innerHTML = `${formatTime(state.elapsed)} <span>/</span> ${formatTime(DURATION)}`;
+  const remaining = Math.ceil((DURATION - state.elapsed) / (state.speed * diagnosticRate));
+  $('elapsed').textContent = state.ended ? '항해 완료' : `${formatTime(remaining)} 남음`;
+  $('speed').value = String(state.speed);
   $('track-progress').style.width = `${progress * 100}%`;
   $('boat-marker').style.left = `${progress * 100}%`;
   $('distance').textContent = `${((progress * ROUTE_DISTANCE) / 1000).toFixed(1)} / 2.8 km`;
@@ -295,6 +305,7 @@ function applyQuality(q) {
   river.quality(q);
   save();
 }
+const diagnosticRate = Math.min(120, Math.max(1, Number(params.get('rate')) || 1));
 function animate(milliseconds) {
   const now = milliseconds * 0.001,
     actualDt = previous ? now - previous : 0,
@@ -302,10 +313,7 @@ function animate(milliseconds) {
   previous = now;
   if (!params.has('still')) state.time += dt;
   if (state.playing) {
-    state.elapsed = Math.min(
-      DURATION,
-      state.elapsed + actualDt * Math.min(120, Math.max(1, Number(params.get('rate')) || 1)),
-    );
+    state.elapsed = advanceVoyage(state.elapsed, actualDt * diagnosticRate, state.speed);
     if (state.elapsed >= DURATION) {
       state.playing = false;
       state.ended = true;
@@ -316,7 +324,8 @@ function animate(milliseconds) {
   const progress = progressAt(state.elapsed),
     point = routePoint(progress),
     moving = state.playing
-      ? THREE.MathUtils.smoothstep(state.elapsed, 0, 8) *
+      ? state.speed *
+        THREE.MathUtils.smoothstep(state.elapsed, 0, 8) *
         (1 - THREE.MathUtils.smoothstep(state.elapsed, DURATION - 8, DURATION))
       : 0;
   boat.position.set(point.x, state.reducedMotion ? 0 : Math.sin(state.time * 0.7) * 0.025, point.z);
@@ -471,6 +480,12 @@ async function init() {
 // UI bindings remain usable while preparing the renderer.
 $('start').onclick = togglePlayback;
 $('play').onclick = togglePlayback;
+$('speed').onchange = (e) => {
+  state.speed = voyageSpeed(e.target.value);
+  save();
+  updateHUD();
+  toast(`이동 속도를 ${state.speed}배로 변경했어요.`);
+};
 $('retry').onclick = () => location.reload();
 for (const name of ['route', 'landmark', 'settings'])
   $(name + '-open').onclick = () => $(name + '-dialog').showModal();

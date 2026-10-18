@@ -1,7 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { inverseFFT, WaveCascade } from '../src/spectrum.js';
-import { progressAt, routePoint, DURATION, formatTime } from '../src/route.js';
+import {
+  progressAt,
+  routePoint,
+  DURATION,
+  formatTime,
+  voyageSpeed,
+  advanceVoyage,
+} from '../src/route.js';
 import { bankAt } from '../src/world.js';
 
 test('inverse FFT reconstructs a known complex frequency', () => {
@@ -71,4 +78,24 @@ test('voyage stays in river and clears all modelled bridge piers', () => {
       if (Math.abs(p.x - pier.x) < pier.r + 24)
         assert.ok(Math.abs(p.z - pier.z) > 11, `pier clearance at ${i / 1000}`);
   }
+});
+test('selected speed scales travel without changing position at the switch or overshooting', () => {
+  const start = 100;
+  for (const speed of [0.5, 1, 1.5, 2, 4]) {
+    assert.equal(advanceVoyage(start, 0, speed), start);
+    const elapsed = advanceVoyage(start, 10, speed);
+    assert.equal(elapsed, start + 10 * speed);
+    assert.ok(
+      Math.abs(progressAt(elapsed) - progressAt(start) - (10 * speed) / (DURATION - 8)) < 1e-10,
+    );
+    let stepped = start;
+    for (let i = 0; i < 100; i++) stepped = advanceVoyage(stepped, 0.1, speed);
+    assert.ok(Math.abs(stepped - elapsed) < 1e-9, 'independent of frame rate');
+    assert.equal(advanceVoyage(0, DURATION / speed, speed), DURATION);
+    assert.equal(advanceVoyage(DURATION - 1, 20, speed), DURATION);
+  }
+  assert.equal(advanceVoyage(start, -10, 4), start);
+  for (const invalid of [null, undefined, NaN, Infinity, -1, 0, 120, 'bad'])
+    assert.equal(voyageSpeed(invalid), 1);
+  assert.equal(voyageSpeed('0.5'), 0.5);
 });

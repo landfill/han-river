@@ -518,9 +518,28 @@ body.started .scene-info {
   font-variant-numeric: tabular-nums;
   color: #f1e5ca83;
 }
-#elapsed span {
-  padding: 0 6px;
-  color: #ffffff3b;
+.speed-control {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 5px;
+}
+.speed-control label {
+  font-size: 9px;
+  color: #f2e8d5bc;
+}
+.speed-control select {
+  font: inherit;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--cream);
+  background: #233c3e;
+  border: 1px solid #f4e3bd66;
+  border-radius: 5px;
+  min-width: 76px;
+  min-height: 44px;
+  padding: 8px;
+  cursor: pointer;
 }
 .route-track {
   flex: 1;
@@ -994,12 +1013,12 @@ kbd {
   .voyage-bar {
     left: 24px;
     right: 24px;
-    gap: 17px;
+    gap: 12px;
     padding: 20px;
     bottom: 50px;
   }
   .route-track {
-    margin: 0 10px;
+    margin: 0;
   }
   .route-button {
     padding-left: 18px;
@@ -1132,8 +1151,9 @@ kbd {
     right: 16px;
     bottom: 46px;
     padding: 17px 17px 14px;
-    gap: 14px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) 76px 32px;
+    gap: 12px;
     border-radius: 8px;
     min-height: 137px;
   }
@@ -1154,13 +1174,10 @@ kbd {
   }
   #elapsed {
     font-size: 8px;
-    position: absolute;
-    top: 41px;
-    right: 68px;
   }
   .route-track {
-    order: 4;
-    flex-basis: 100%;
+    grid-row: 2;
+    grid-column: 1 / -1;
     margin: 6px 0 0;
   }
   .route-labels {

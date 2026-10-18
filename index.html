@@ -102,7 +102,7 @@
         <div class="voyage-status">
           <span class="small-label" id="voyage-state">당신을 기다리는 항해</span
           ><strong id="current-location">여의도 선착장</strong
-          ><span id="elapsed">00:00 <span>/</span> 08:00</span>
+          ><span id="elapsed" title="선택한 속도에서 남은 항해 시간">08:00 남음</span>
         </div>
         <div class="route-track">
           <div class="route-labels">
@@ -118,7 +118,17 @@
             <span>SEOUL RIVER JOURNEY</span><span id="distance">0.0 / 2.8 km</span>
           </div>
         </div>
-        <button class="route-button" id="route-open">
+        <div class="speed-control">
+          <label for="speed">이동 속도</label>
+          <select id="speed" aria-describedby="elapsed">
+            <option value="0.5">0.5배</option>
+            <option value="1" selected>1배</option>
+            <option value="1.5">1.5배</option>
+            <option value="2">2배</option>
+            <option value="4">4배</option>
+          </select>
+        </div>
+        <button class="route-button" id="route-open" aria-label="항로 보기">
           <i data-icon="map"></i><span>항로 보기</span><i data-icon="arrow-up-right"></i>
         </button>
       </section>

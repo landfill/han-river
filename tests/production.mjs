@@ -77,6 +77,38 @@ try {
   assert.equal(await page.evaluate(() => window.__HAN_RIVER__.state.playing), true);
   await page.locator('#play').click();
   checks.push('active cruise and stern wake captured');
+  const paused = await page.evaluate(() => window.__HAN_RIVER__.snapshot());
+  for (const speed of ['0.5', '1', '1.5', '2', '4']) {
+    await page.locator('#speed').selectOption(speed);
+    const state = await page.evaluate(() => window.__HAN_RIVER__.snapshot());
+    assert.equal(state.speed, Number(speed));
+    assert.equal(state.elapsed, paused.elapsed);
+    assert.deepEqual(state.position, paused.position);
+    assert.match(await page.locator('#elapsed').innerText(), /남음$/);
+  }
+  await page.locator('#speed').selectOption('0.5');
+  const slowRemaining = await page.locator('#elapsed').innerText();
+  await page.locator('#speed').selectOption('4');
+  assert.notEqual(await page.locator('#elapsed').innerText(), slowRemaining);
+  assert.equal(
+    await page.evaluate(() => JSON.parse(localStorage.getItem('hangang-preferences')).speed),
+    4,
+  );
+  checks.push('all five speeds update remaining time and preserve paused position');
+  await page.locator('#play').click();
+  await page.waitForFunction(
+    (elapsed) => window.__HAN_RIVER__.state.elapsed > elapsed,
+    paused.elapsed,
+  );
+  await page.locator('#play').click();
+  assert.equal(await page.evaluate(() => window.__HAN_RIVER__.state.speed), 4);
+  await page.evaluate(() => window.__HAN_RIVER__.reset());
+  assert.equal(await page.locator('#elapsed').innerText(), '02:00 남음');
+  await page.locator('#speed').focus();
+  await page.keyboard.press('ArrowUp');
+  assert.equal(await page.locator('#speed').inputValue(), '2');
+  assert.equal(await page.locator('#elapsed').innerText(), '04:00 남음');
+  checks.push('resume, restart and keyboard speed control retain expected travel state');
   await page.locator('#settings-open').click();
   await page.locator('#quality').selectOption('high');
   await page.keyboard.press('Escape');
@@ -86,6 +118,27 @@ try {
   assert.deepEqual(errors, []);
   assert.deepEqual(await page.evaluate(() => window.__HAN_RIVER__.state.errors), []);
   checks.push('high quality shadow/reflection configuration renders without errors');
+  await page.setViewportSize({ width: 375, height: 812 });
+  await rendered(page);
+  const mobile = await page.evaluate(() => {
+    const ids = ['play', 'current-location', 'speed', 'route-open'];
+    return ids.map((id) => {
+      const r = document.getElementById(id).getBoundingClientRect();
+      return { id, x: r.x, right: r.right, y: r.y, bottom: r.bottom, height: r.height };
+    });
+  });
+  for (let i = 0; i < mobile.length; i++) {
+    assert.ok(mobile[i].x >= 0 && mobile[i].right <= 375, `${mobile[i].id} fits mobile`);
+    if (i) assert.ok(mobile[i - 1].right <= mobile[i].x, 'mobile controls do not overlap');
+  }
+  assert.ok(mobile.find((r) => r.id === 'speed').height >= 44);
+  await page.screenshot({ path: 'artifacts/09-mobile-speed.png' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => window.__HAN_RIVER__?.state.ready, null, { timeout: 120000 });
+  assert.equal(await page.locator('#speed').inputValue(), '2');
+  assert.equal(await page.locator('#elapsed').innerText(), '04:00 남음');
+  assert.deepEqual(errors, []);
+  checks.push('mobile control fits and saved speed survives reload');
   const report = {
     date: new Date().toISOString(),
     browser: await browser.version(),
