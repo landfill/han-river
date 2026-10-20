@@ -1,0 +1,169 @@
+{
+  "unit": {
+    "command": "npm test",
+    "passed": 8
+  },
+  "build": {
+    "command": "npm run build",
+    "status": "passed",
+    "javascriptAsset": "index-DHmLppxJ.js"
+  },
+  "production": {
+    "date": "2026-10-20T11:41:10.744Z",
+    "browser": "154.0.8037.57",
+    "checks": [
+      "built app renders from dist, including local fonts and texture",
+      "keyboard look works immediately after starting",
+      "active cruise and stern wake captured",
+      "all five speeds update remaining time and preserve paused position",
+      "resume, restart and keyboard speed control retain expected travel state",
+      "high quality shadow/reflection configuration renders without errors",
+      "mobile control fits and saved speed survives reload"
+    ],
+    "errors": [],
+    "metrics": {
+      "ready": true,
+      "playing": false,
+      "elapsed": 0,
+      "speed": 2,
+      "renderMode": "desktop",
+      "progress": 0,
+      "location": "여의도 선착장",
+      "position": {
+        "x": -1150,
+        "z": -90,
+        "heading": -0.06554283062485457
+      },
+      "frames": 4,
+      "medianFrameMs": 0,
+      "p95FrameMs": 0,
+      "drawCalls": 48,
+      "triangles": 736831,
+      "backend": "WebGL2",
+      "adapter": "WebGL2 fallback",
+      "loadMs": 16688.30000001192
+    }
+  },
+  "mobile": {
+    "date": "2026-10-20T11:39:14.479Z",
+    "browser": "154.0.8037.57",
+    "note": "iOS UA and touch emulation in Chromium/SwiftShader; not Safari/WebKit or real device validation",
+    "checks": [
+      "iPhone Safari UA selects mobile geometry while retaining all 1200 crowns",
+      "quality changes actual mobile grids and reflection targets without accumulating geometry",
+      "native touch changes view while paused and sailing; speed settings remain independent",
+      "time presets, landmarks and stern stay renderable on mobile",
+      "visibility pause prevents travel jumps and preserves speed",
+      "iOS Edge UA also selects the mobile path"
+    ],
+    "inputTiming": {
+      "eventQueueMs": 1773.1000000238419,
+      "nextAnimationCallbackMs": 2.899999976158142
+    },
+    "errors": []
+  },
+  "browser": {
+    "date": "2026-10-20T11:50:59.769Z",
+    "browser": "154.0.8037.57",
+    "viewport": "1280x800, low quality (mobile 390x844)",
+    "results": [
+      {
+        "name": "desktop renders locally with WebGL2 software fallback",
+        "status": "passed",
+        "durationMs": 15477
+      },
+      {
+        "name": "start, travel, pause and resume use real UI",
+        "status": "passed",
+        "durationMs": 8131
+      },
+      {
+        "name": "viewpoints, keyboard and pointer look change camera",
+        "status": "passed",
+        "durationMs": 21551
+      },
+      {
+        "name": "day, golden-hour and night render distinct scenes",
+        "status": "passed",
+        "durationMs": 39637
+      },
+      {
+        "name": "route and landmark dialogs support close and Escape",
+        "status": "passed",
+        "durationMs": 8704
+      },
+      {
+        "name": "sound activates only on interaction and toggles",
+        "status": "passed",
+        "durationMs": 3042
+      },
+      {
+        "name": "quality and reduced motion persist; restart resets cruise",
+        "status": "passed",
+        "durationMs": 3049
+      },
+      {
+        "name": "bridge approach, passage, stern and night scene capture",
+        "status": "passed",
+        "durationMs": 87816
+      },
+      {
+        "name": "full accelerated voyage reaches the end and restarts",
+        "status": "passed",
+        "durationMs": 24534
+      },
+      {
+        "name": "mobile layout and native touch look work",
+        "status": "passed",
+        "durationMs": 20079
+      },
+      {
+        "name": "measured render statistics and clean console",
+        "status": "passed",
+        "durationMs": 57
+      },
+      {
+        "name": "asset failure displays recovery and retry succeeds",
+        "status": "passed",
+        "durationMs": 12572
+      }
+    ],
+    "metrics": {
+      "ready": true,
+      "playing": false,
+      "elapsed": 72,
+      "speed": 1,
+      "renderMode": "desktop",
+      "progress": 0.1440677966101695,
+      "location": "여의도 선착장",
+      "position": {
+        "x": -746.6101694915254,
+        "z": -116.09695758872047,
+        "heading": -0.06273445409140613
+      },
+      "frames": 131,
+      "medianFrameMs": 916.6999999999916,
+      "p95FrameMs": 7033.000000000001,
+      "drawCalls": 53,
+      "triangles": 737703,
+      "backend": "WebGL2",
+      "adapter": "google swiftshader ",
+      "loadMs": 8767.90000000596
+    },
+    "errors": []
+  },
+  "notes": [
+    "All browser results are Chromium/SwiftShader, not iPhone Safari or Edge engine validation.",
+    "An initial multi-context test timed out while both scenes rendered. The completed scene now exercises the application visibility handler to suspend its renderer. The original timeout and assertions are retained; the full suite passed on rerun."
+  ],
+  "webgpuSmoke": {
+    "status": "failed on both baseline and candidate",
+    "command": "PROFILE_BACKEND=webgpu PROFILE_QUALITY=low PROFILE_STILL=1 PROFILE_CASES=golden PROFILE_SAMPLES=1 PROFILE_WARMUP=3 npm run test:performance",
+    "beforeUses": "PROFILE_DIST=artifacts/performance/baseline-dist",
+    "errors": [
+      "OperationError: A valid external Instance reference no longer exists.",
+      "OperationError: Instance dropped in popErrorScope"
+    ],
+    "scope": "Forced software WebGPU initialization failure in this cloud host. Default WebGL2 fallback passed. Physical WebGPU remains unverified."
+  }
+}

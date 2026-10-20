@@ -1,6 +1,7 @@
 import * as T from 'three/webgpu';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { seededRandom } from './spectrum.js';
+import { partitionInstances } from './spatial-instances.js';
 const rnd = seededRandom(437);
 const materials = {},
   batches = new Map();
@@ -101,7 +102,7 @@ export function bankAt(x, points) {
     }
   return points.at(-1)[1];
 }
-export function createWorld(scene) {
+export function createWorld(scene, { mobile = false } = {}) {
   const concrete = mat('concrete', '#a9aca1'),
     edge = mat('edge', '#727d73'),
     grass = mat('grass', '#657c55'),
@@ -219,7 +220,13 @@ export function createWorld(scene) {
   }
   trunks.castShadow = false;
   crowns.castShadow = false;
-  scene.add(trunks, crowns);
+  trunks.name = 'Riverbank trunks';
+  crowns.name = 'Riverbank crowns';
+  // Coarse cells keep culling useful without multiplying buffers and startup
+  // pipelines across hundreds of small riverbank batches on mobile.
+  const treeCrowns = mobile ? partitionInstances(crowns, 2000) : crowns,
+    treeTrunks = mobile ? partitionInstances(trunks, 2000) : trunks;
+  scene.add(treeTrunks, treeCrowns);
   const rocks = new T.InstancedMesh(
     new T.IcosahedronGeometry(1, 0),
     new T.MeshStandardMaterial({ color: '#7f887b', roughness: 1 }),
@@ -426,7 +433,8 @@ export function createWorld(scene) {
     glass,
     gold,
     apartment,
-    trees: crowns,
+    trees: treeCrowns,
+    treeCells: mobile ? [...treeTrunks.children, ...treeCrowns.children] : [],
     setTime(preset) {
       const n = preset === 'night';
       glass.map = n ? nightMap : dayMap;

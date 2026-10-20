@@ -11,7 +11,9 @@
     "test:browser": "node tests/browser.mjs",
     "format": "prettier --write index.html src tests docs README.md",
     "format:check": "prettier --check index.html src tests docs README.md",
-    "test:production": "node tests/production.mjs"
+    "test:production": "node tests/production.mjs",
+    "test:mobile": "node tests/mobile.mjs",
+    "test:performance": "node tests/performance.mjs"
   },
   "dependencies": {
     "three": "0.186.1"
