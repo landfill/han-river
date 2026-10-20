@@ -1,0 +1,655 @@
+{
+  "date": "2026-10-20T11:37:05.880Z",
+  "source": "5286f17c5f50cd44596fd51e19553e36eaef8dcc",
+  "label": "after",
+  "software": true,
+  "host": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "cpus": 4,
+    "memory": 35743760384
+  },
+  "browser": "154.0.8037.57",
+  "samples": 60,
+  "warmup": 15,
+  "environment": {
+    "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+    "viewport": [390, 844],
+    "dpr": 3,
+    "canvas": [448, 970],
+    "backend": "WebGL2",
+    "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "gpuTimerSupported": true,
+    "loadMs": 9732.200000017881,
+    "resources": [
+      {
+        "name": "/assets/index-DHmLppxJ.js",
+        "encodedBytes": 274331,
+        "duration": 126.2999999821186
+      },
+      {
+        "name": "/assets/index-DWH0Zxx4.css",
+        "encodedBytes": 4834,
+        "duration": 31.599999994039536
+      },
+      {
+        "name": "/fonts/NotoSansKR.woff",
+        "encodedBytes": 103312,
+        "duration": 228
+      },
+      {
+        "name": "/fonts/NotoSerifKR.woff",
+        "encodedBytes": 130244,
+        "duration": 217.40000000596046
+      },
+      {
+        "name": "/textures/waternormals.jpg",
+        "encodedBytes": 248813,
+        "duration": 9.800000011920929
+      },
+      {
+        "name": "/favicon.svg",
+        "encodedBytes": 244,
+        "duration": 8.599999994039536
+      }
+    ],
+    "reflectionScale": 0.35,
+    "requestedReflectionScale": null
+  },
+  "results": [
+    {
+      "name": "golden",
+      "snapshot": {
+        "ready": true,
+        "playing": false,
+        "elapsed": 96,
+        "speed": 1,
+        "renderMode": "mobile",
+        "progress": 0.19491525423728814,
+        "location": "여의도 선착장",
+        "position": {
+          "x": -604.2372881355932,
+          "z": -124.88376565648768,
+          "heading": -0.06043225768476444
+        },
+        "frames": 80,
+        "medianFrameMs": 316.70000000000084,
+        "p95FrameMs": 1116.6000000000001,
+        "drawCalls": 48,
+        "triangles": 264479,
+        "backend": "WebGL2",
+        "adapter": "WebGL2 fallback",
+        "loadMs": 9732.200000017881
+      },
+      "time": "golden",
+      "view": "city",
+      "quality": "balanced",
+      "memory": {
+        "attributes": 373,
+        "attributesSize": 24727512,
+        "geometries": 37,
+        "indexAttributes": 22,
+        "indexAttributesSize": 489450,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 24,
+        "programsSize": 183303,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 4,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 14,
+        "texturesSize": 29617171,
+        "uniformBuffers": 171,
+        "uniformBuffersSize": 174560,
+        "total": 55191996
+      },
+      "renderPasses": 3,
+      "heap": 22676985,
+      "reflectionTargets": [[157, 340]],
+      "waterVertices": 16641,
+      "cpuMetrics": {
+        "LayoutDuration": 0.004498000000000002,
+        "RecalcStyleDuration": 0.0010399999999999993,
+        "ScriptDuration": 0.30708099999999994,
+        "TaskDuration": 0.49056000000000033
+      },
+      "metrics": {
+        "intervalMs": {
+          "count": 60,
+          "median": 300.0000000000007,
+          "p95": 633.4000000000017,
+          "p99": 866.5999999999983,
+          "mean": 314.7083333333333
+        },
+        "sceneCpuMs": {
+          "count": 60,
+          "median": 0.09999999403953552,
+          "p95": 0.5,
+          "p99": 0.6000000238418579,
+          "mean": 0.13500000188748043
+        },
+        "riverCpuMs": {
+          "count": 60,
+          "median": 1.5,
+          "p95": 2.199999988079071,
+          "p99": 3,
+          "mean": 1.4566666647791862
+        },
+        "otherUpdateCpuMs": {
+          "count": 60,
+          "median": 0,
+          "p95": 0.5999999940395355,
+          "p99": 1,
+          "mean": 0.07499999950329463
+        },
+        "renderSubmitCpuMs": {
+          "count": 60,
+          "median": 2.600000023841858,
+          "p95": 6.699999988079071,
+          "p99": 14.200000017881393,
+          "mean": 3.216666667163372
+        },
+        "drawCalls": {
+          "count": 60,
+          "median": 48,
+          "p95": 48,
+          "p99": 48,
+          "mean": 48
+        },
+        "triangles": {
+          "count": 60,
+          "median": 264479,
+          "p95": 264479,
+          "p99": 264479,
+          "mean": 264479
+        }
+      },
+      "longTasks": {
+        "count": 0,
+        "median": null,
+        "p95": null,
+        "p99": null,
+        "mean": null
+      },
+      "over50ms": 56
+    },
+    {
+      "name": "bridge",
+      "snapshot": {
+        "ready": true,
+        "playing": false,
+        "elapsed": 199.67999999999998,
+        "speed": 1,
+        "renderMode": "mobile",
+        "progress": 0.41457627118644064,
+        "location": "원효대교",
+        "position": {
+          "x": 10.813559322033825,
+          "z": -157.41165980906254,
+          "heading": -0.043460253539597524
+        },
+        "frames": 159,
+        "medianFrameMs": 366.59999999999826,
+        "p95FrameMs": 866.5999999999983,
+        "drawCalls": 64,
+        "triangles": 423687,
+        "backend": "WebGL2",
+        "adapter": "WebGL2 fallback",
+        "loadMs": 9732.200000017881
+      },
+      "time": "golden",
+      "view": "bow",
+      "quality": "balanced",
+      "memory": {
+        "attributes": 375,
+        "attributesSize": 25241304,
+        "geometries": 38,
+        "indexAttributes": 23,
+        "indexAttributesSize": 553674,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 24,
+        "programsSize": 183303,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 4,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 14,
+        "texturesSize": 29617171,
+        "uniformBuffers": 173,
+        "uniformBuffersSize": 175104,
+        "total": 55770556
+      },
+      "renderPasses": 3,
+      "heap": 23670942,
+      "reflectionTargets": [[157, 340]],
+      "waterVertices": 16641,
+      "cpuMetrics": {
+        "LayoutDuration": 0.007891999999999982,
+        "RecalcStyleDuration": 0.0014110000000000025,
+        "ScriptDuration": 0.3376300000000001,
+        "TaskDuration": 0.4876439999999995
+      },
+      "metrics": {
+        "intervalMs": {
+          "count": 60,
+          "median": 533.300000000004,
+          "p95": 1216.5999999999997,
+          "p99": 1416.5999999999883,
+          "mean": 583.0316666666665
+        },
+        "sceneCpuMs": {
+          "count": 60,
+          "median": 0.09999999403953552,
+          "p95": 0.30000001192092896,
+          "p99": 0.5999999940395355,
+          "mean": 0.11833333373069763
+        },
+        "riverCpuMs": {
+          "count": 60,
+          "median": 1.5,
+          "p95": 3,
+          "p99": 4.199999988079071,
+          "mean": 1.5033333336313566
+        },
+        "otherUpdateCpuMs": {
+          "count": 60,
+          "median": 0,
+          "p95": 0.699999988079071,
+          "p99": 3.600000023841858,
+          "mean": 0.11666666716337204
+        },
+        "renderSubmitCpuMs": {
+          "count": 60,
+          "median": 2.7999999821186066,
+          "p95": 8.5,
+          "p99": 16.100000023841858,
+          "mean": 3.6216666638851165
+        },
+        "drawCalls": {
+          "count": 60,
+          "median": 64,
+          "p95": 64,
+          "p99": 64,
+          "mean": 64
+        },
+        "triangles": {
+          "count": 60,
+          "median": 423687,
+          "p95": 423687,
+          "p99": 423687,
+          "mean": 423687
+        }
+      },
+      "longTasks": {
+        "count": 0,
+        "median": null,
+        "p95": null,
+        "p99": null,
+        "mean": null
+      },
+      "over50ms": 58
+    },
+    {
+      "name": "deck",
+      "snapshot": {
+        "ready": true,
+        "playing": false,
+        "elapsed": 278.4,
+        "speed": 1,
+        "renderMode": "mobile",
+        "progress": 0.5813559322033898,
+        "location": "원효대교",
+        "position": {
+          "x": 477.79661016949126,
+          "z": -173.4575132340678,
+          "heading": -0.02456324984683695
+        },
+        "frames": 238,
+        "medianFrameMs": 483.2000000000036,
+        "p95FrameMs": 1166.6000000000008,
+        "drawCalls": 70,
+        "triangles": 483087,
+        "backend": "WebGL2",
+        "adapter": "WebGL2 fallback",
+        "loadMs": 9732.200000017881
+      },
+      "time": "golden",
+      "view": "stern",
+      "quality": "balanced",
+      "memory": {
+        "attributes": 375,
+        "attributesSize": 25241304,
+        "geometries": 38,
+        "indexAttributes": 23,
+        "indexAttributesSize": 553674,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 24,
+        "programsSize": 183303,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 4,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 14,
+        "texturesSize": 29617171,
+        "uniformBuffers": 173,
+        "uniformBuffersSize": 175104,
+        "total": 55770556
+      },
+      "renderPasses": 3,
+      "heap": 23750774,
+      "reflectionTargets": [[157, 340]],
+      "waterVertices": 16641,
+      "cpuMetrics": {
+        "LayoutDuration": 0.00464500000000001,
+        "RecalcStyleDuration": 0.001354999999999995,
+        "ScriptDuration": 0.3273769999999998,
+        "TaskDuration": 0.42449200000000076
+      },
+      "metrics": {
+        "intervalMs": {
+          "count": 60,
+          "median": 400.0000000000057,
+          "p95": 866.6000000000054,
+          "p99": 1499.900000000011,
+          "mean": 449.4250000000003
+        },
+        "sceneCpuMs": {
+          "count": 60,
+          "median": 0.09999999403953552,
+          "p95": 0.3999999761581421,
+          "p99": 11.899999976158142,
+          "mean": 0.3183333317438761
+        },
+        "riverCpuMs": {
+          "count": 60,
+          "median": 1.199999988079071,
+          "p95": 2.9000000059604645,
+          "p99": 11.600000023841858,
+          "mean": 1.496666669845581
+        },
+        "otherUpdateCpuMs": {
+          "count": 60,
+          "median": 0,
+          "p95": 0.5,
+          "p99": 0.7999999821186066,
+          "mean": 0.05666666676600774
+        },
+        "renderSubmitCpuMs": {
+          "count": 60,
+          "median": 2.5,
+          "p95": 7.0999999940395355,
+          "p99": 33.19999998807907,
+          "mean": 3.3966666614015897
+        },
+        "drawCalls": {
+          "count": 60,
+          "median": 70,
+          "p95": 70,
+          "p99": 70,
+          "mean": 70
+        },
+        "triangles": {
+          "count": 60,
+          "median": 483087,
+          "p95": 483087,
+          "p99": 483087,
+          "mean": 483087
+        }
+      },
+      "longTasks": {
+        "count": 1,
+        "median": 62,
+        "p95": 62,
+        "p99": 62,
+        "mean": 62
+      },
+      "over50ms": 59
+    },
+    {
+      "name": "night",
+      "snapshot": {
+        "ready": true,
+        "playing": false,
+        "elapsed": 96,
+        "speed": 1,
+        "renderMode": "mobile",
+        "progress": 0.19491525423728814,
+        "location": "여의도 선착장",
+        "position": {
+          "x": -604.2372881355932,
+          "z": -124.88376565648768,
+          "heading": -0.06043225768476444
+        },
+        "frames": 317,
+        "medianFrameMs": 400.0000000000341,
+        "p95FrameMs": 1166.6000000000008,
+        "drawCalls": 48,
+        "triangles": 264479,
+        "backend": "WebGL2",
+        "adapter": "WebGL2 fallback",
+        "loadMs": 9732.200000017881
+      },
+      "time": "night",
+      "view": "city",
+      "quality": "balanced",
+      "memory": {
+        "attributes": 407,
+        "attributesSize": 27698904,
+        "geometries": 38,
+        "indexAttributes": 23,
+        "indexAttributesSize": 553674,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 26,
+        "programsSize": 210337,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 4,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 15,
+        "texturesSize": 30316047,
+        "uniformBuffers": 175,
+        "uniformBuffersSize": 175808,
+        "total": 58954770
+      },
+      "renderPasses": 3,
+      "heap": 24917814,
+      "reflectionTargets": [[157, 340]],
+      "waterVertices": 16641,
+      "cpuMetrics": {
+        "LayoutDuration": 0.05041899999999999,
+        "RecalcStyleDuration": 0.0011150000000000049,
+        "ScriptDuration": 0.7293250000000002,
+        "TaskDuration": 1.5954119999999996
+      },
+      "metrics": {
+        "intervalMs": {
+          "count": 60,
+          "median": 383.2999999999913,
+          "p95": 1633.2999999999913,
+          "p99": 3166.499999999985,
+          "mean": 620.2533333333336
+        },
+        "sceneCpuMs": {
+          "count": 60,
+          "median": 0.09999999403953552,
+          "p95": 2.4000000059604645,
+          "p99": 142.80000001192093,
+          "mean": 2.7699999983112016
+        },
+        "riverCpuMs": {
+          "count": 60,
+          "median": 1.4000000059604645,
+          "p95": 4.9000000059604645,
+          "p99": 144.39999997615814,
+          "mean": 4.400000000496705
+        },
+        "otherUpdateCpuMs": {
+          "count": 60,
+          "median": 0,
+          "p95": 0.5,
+          "p99": 2.199999988079071,
+          "mean": 0.08166666726271311
+        },
+        "renderSubmitCpuMs": {
+          "count": 60,
+          "median": 2.199999988079071,
+          "p95": 16.099999994039536,
+          "p99": 36.5,
+          "mean": 4.096666666865349
+        },
+        "drawCalls": {
+          "count": 60,
+          "median": 48,
+          "p95": 48,
+          "p99": 48,
+          "mean": 48
+        },
+        "triangles": {
+          "count": 60,
+          "median": 264479,
+          "p95": 264479,
+          "p99": 264479,
+          "mean": 264479
+        }
+      },
+      "longTasks": {
+        "count": 6,
+        "median": 203,
+        "p95": 242,
+        "p99": 242,
+        "mean": 173.33333333333334
+      },
+      "over50ms": 60
+    },
+    {
+      "name": "travel",
+      "snapshot": {
+        "ready": true,
+        "playing": true,
+        "elapsed": 124.6489,
+        "speed": 1,
+        "renderMode": "mobile",
+        "progress": 0.25561207627118643,
+        "location": "여의도 선착장",
+        "position": {
+          "x": -434.28618644067797,
+          "z": -134.87290121779347,
+          "heading": -0.05683531545467503
+        },
+        "frames": 397,
+        "medianFrameMs": 400.0000000000057,
+        "p95FrameMs": 1216.5999999999997,
+        "drawCalls": 48,
+        "triangles": 264479,
+        "backend": "WebGL2",
+        "adapter": "WebGL2 fallback",
+        "loadMs": 9732.200000017881
+      },
+      "time": "golden",
+      "view": "city",
+      "quality": "balanced",
+      "memory": {
+        "attributes": 439,
+        "attributesSize": 30156504,
+        "geometries": 38,
+        "indexAttributes": 23,
+        "indexAttributesSize": 553674,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 24,
+        "programsSize": 183309,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 4,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 15,
+        "texturesSize": 30316047,
+        "uniformBuffers": 176,
+        "uniformBuffersSize": 175680,
+        "total": 61385214
+      },
+      "renderPasses": 3,
+      "heap": 23921766,
+      "reflectionTargets": [[157, 340]],
+      "waterVertices": 16641,
+      "cpuMetrics": {
+        "LayoutDuration": 0.005203999999999986,
+        "RecalcStyleDuration": 0.004673999999999998,
+        "ScriptDuration": 0.27943600000000046,
+        "TaskDuration": 0.44512399999999985
+      },
+      "metrics": {
+        "intervalMs": {
+          "count": 60,
+          "median": 300.00000000001137,
+          "p95": 533.299999999997,
+          "p99": 666.5999999999883,
+          "mean": 325.26666666666637
+        },
+        "sceneCpuMs": {
+          "count": 60,
+          "median": 0.09999999403953552,
+          "p95": 0.20000001788139343,
+          "p99": 0.9000000059604645,
+          "mean": 0.11666666666666667
+        },
+        "riverCpuMs": {
+          "count": 60,
+          "median": 1.5,
+          "p95": 2.9000000059604645,
+          "p99": 3.899999976158142,
+          "mean": 1.6133333345254262
+        },
+        "otherUpdateCpuMs": {
+          "count": 60,
+          "median": 0,
+          "p95": 0.5,
+          "p99": 1.699999988079071,
+          "mean": 0.07833333214124044
+        },
+        "renderSubmitCpuMs": {
+          "count": 60,
+          "median": 2.4000000059604645,
+          "p95": 4.300000011920929,
+          "p99": 12.5,
+          "mean": 2.6833333348234496
+        },
+        "drawCalls": {
+          "count": 60,
+          "median": 48,
+          "p95": 48,
+          "p99": 48,
+          "mean": 48
+        },
+        "triangles": {
+          "count": 60,
+          "median": 264479,
+          "p95": 264479,
+          "p99": 264479,
+          "mean": 264479
+        }
+      },
+      "longTasks": {
+        "count": 0,
+        "median": null,
+        "p95": null,
+        "p99": null,
+        "mean": null
+      },
+      "over50ms": 60
+    }
+  ],
+  "errors": [],
+  "gpuQueries": [
+    342.395284, 341.52456600000005, 319.892025, 367.952795, 284.485662, 275.980026, 274.521332,
+    305.468965, 349.662952, 331.26320899999996, 300.50053299999996, 267.067132
+  ]
+}

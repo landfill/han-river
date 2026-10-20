@@ -22,8 +22,10 @@ import {
   exp,
 } from 'three/tsl';
 import { WaveCascade } from './spectrum.js';
+import { reflectionScale, riverSegments } from './render-policy.js';
+import { createRiverGrid } from './river-grid.js';
 
-export async function createRiver() {
+export async function createRiver({ mobile = false, quality = 'balanced' } = {}) {
   let normalMap;
   try {
     normalMap = await new THREE.TextureLoader().loadAsync('/textures/waternormals.jpg');
@@ -123,15 +125,7 @@ export async function createRiver() {
   const bridgeDistance = abs(uv.x.add(uv.y.mul(0.15)).sub(26));
   const bridgeShade = smoothstep(12, 25, bridgeDistance).mul(0.45).add(0.55);
   material.colorNode = mix(lighting.mul(bridgeShade), vec3(0.66, 0.72, 0.67), foam);
-  // A continuous exponential grid: ~0.95 m cells at the boat, gradually
-  // expanding toward 8 km. The old uniform grid had 62.5 m near-field cells.
-  const geometry = new THREE.PlaneGeometry(2, 2, 256, 256);
-  const positions = geometry.attributes.position;
-  const warp = (x) => ((Math.sign(x) * Math.expm1(Math.abs(x) * 6)) / Math.expm1(6)) * 8000;
-  for (let i = 0; i < positions.count; i++)
-    positions.setXY(i, warp(positions.getX(i)), warp(positions.getY(i)));
-  geometry.computeBoundingBox();
-  geometry.computeBoundingSphere();
+  const geometry = createRiverGrid(riverSegments(quality, mobile));
   const mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.x = -Math.PI / 2;
   mesh.add(mirror.target);
@@ -162,7 +156,14 @@ export async function createRiver() {
       }
     },
     quality(q) {
-      mirror.resolutionScale = q === 'high' ? 0.65 : q === 'low' ? 0.25 : 0.45;
+      // ReflectorNode is a texture view. Its base node owns the render target.
+      mirror.reflector.resolutionScale = reflectionScale(q, mobile);
+      const segments = riverSegments(q, mobile);
+      if (mesh.geometry.parameters.widthSegments !== segments) {
+        const previous = mesh.geometry;
+        mesh.geometry = createRiverGrid(segments);
+        previous.dispose();
+      }
     },
   };
 }

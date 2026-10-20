@@ -54,7 +54,7 @@ try {
     if (m.type() === 'error') errors.push(m.text());
   });
   page.on('requestfailed', (r) => errors.push(r.url() + ': ' + r.failure()?.errorText));
-  await page.goto(base + '/?still=1&quality=balanced', { waitUntil: 'domcontentloaded' });
+  await page.goto(base + '/?still=1&quality=balanced&profile=1', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__HAN_RIVER__?.state.ready, null, { timeout: 120000 });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(700);
@@ -115,6 +115,17 @@ try {
   await rendered(page);
   await page.screenshot({ path: 'artifacts/08-high-quality.png' });
   assert.equal(await page.evaluate(() => window.__HAN_RIVER__.state.quality), 'high');
+  const reflection = await page.evaluate(() => {
+    const { river } = window.__HAN_RIVER__.inspect(),
+      canvas = document.getElementById('scene');
+    return {
+      scale: river.mirror.reflector.resolutionScale,
+      expected: [Math.round(canvas.width * 0.5), Math.round(canvas.height * 0.5)],
+      targets: [...river.mirror.reflector.renderTargets.values()].map((t) => [t.width, t.height]),
+    };
+  });
+  assert.equal(reflection.scale, 0.5);
+  assert.ok(reflection.targets.some((size) => size.every((v, i) => v === reflection.expected[i])));
   assert.deepEqual(errors, []);
   assert.deepEqual(await page.evaluate(() => window.__HAN_RIVER__.state.errors), []);
   checks.push('high quality shadow/reflection configuration renders without errors');

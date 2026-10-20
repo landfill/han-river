@@ -170,6 +170,13 @@ try {
     }
   });
   await check('full accelerated voyage reaches the end and restarts', async () => {
+    // browser.newPage creates a separate context; headless Chromium can keep
+    // both scenes foregrounded. Exercise the real visibility handler to suspend
+    // the completed scene instead of making SwiftShader render two apps at once.
+    await page.evaluate(() => {
+      Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
     const voyage = await browser.newPage({
       viewport: { width: 960, height: 600 },
       reducedMotion: 'reduce',
@@ -192,6 +199,8 @@ try {
       hasTouch: true,
       deviceScaleFactor: 1,
       reducedMotion: 'reduce',
+      userAgent:
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
     });
     mobile.on('pageerror', (e) => errors.push(String(e)));
     await ready(mobile, '/?quality=low&still=1');
@@ -217,6 +226,10 @@ try {
   });
   await check('measured render statistics and clean console', async () => {
     await page.bringToFront();
+    await page.evaluate(() => {
+      delete document.hidden;
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
     await page.waitForFunction(() => window.__HAN_RIVER__.stats.medianFrameMs > 0, null, {
       timeout: 20000,
     });

@@ -1,0 +1,51 @@
+{
+  "browser": "154.0.8037.57",
+  "frames": 17,
+  "wallMs": 12034,
+  "before": {
+    "ready": true,
+    "playing": false,
+    "elapsed": 182.4,
+    "speed": 4,
+    "renderMode": "mobile",
+    "progress": 0.3779661016949153,
+    "location": "원효대교",
+    "position": {
+      "x": -91.69491525423723,
+      "z": -152.76966744230452,
+      "heading": -0.047003504467879584
+    },
+    "frames": 8,
+    "medianFrameMs": 0,
+    "p95FrameMs": 0,
+    "drawCalls": 64,
+    "triangles": 423687,
+    "backend": "WebGL2",
+    "adapter": "WebGL2 fallback",
+    "loadMs": 10418.899999976158
+  },
+  "after": {
+    "ready": true,
+    "playing": false,
+    "elapsed": 224.53200000000007,
+    "speed": 4,
+    "renderMode": "mobile",
+    "progress": 0.46722881355932216,
+    "location": "원효대교",
+    "position": {
+      "x": 158.2406779661021,
+      "z": -163.42130062288373,
+      "heading": -0.03794252936632536
+    },
+    "frames": 26,
+    "medianFrameMs": 0,
+    "p95FrameMs": 0,
+    "drawCalls": 64,
+    "triangles": 423687,
+    "backend": "WebGL2",
+    "adapter": "WebGL2 fallback",
+    "loadMs": 10418.899999976158
+  },
+  "errors": [],
+  "note": "Actual 4x cruise captured in Chromium/SwiftShader with iPhone UA; recording overhead included. Not device FPS or Safari validation."
+}

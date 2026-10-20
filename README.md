@@ -22,6 +22,7 @@ npm run preview -- --port 4173
 npm test
 npm run test:browser
 npm run test:production
+npm run test:mobile
 ```
 
 브라우저 테스트에는 Chromium이 필요합니다. 기본 경로는 `/usr/bin/chromium`이며 `CHROMIUM_PATH`로 변경할 수 있습니다. 테스트가 자체 Vite 서버를 4175 포트에서 시작하고 종료합니다. 다른 서버를 미리 실행할 필요가 없습니다. `test:production`은 빌드된 dist를 4177 포트에서 별도로 실행해 높은 화질, 선미 시야, 이동 속도·설정 복원·모바일 배치를 검증합니다. 먼저 `npm run build`를 실행하세요.
@@ -56,7 +57,9 @@ Three.js 0.186.1의 `WebGPURenderer`와 TSL을 사용했습니다. 같은 노드
 - `src/audio.js`: 사용자 동작 이후 활성화되는 Web Audio 합성 환경음.
 - `tests/`: FFT 수치·항로 안전 여유·가감속의 단위 검증과 실제 Chromium에서 수행하는 기능·복구·반응형 검증.
 
-화질은 내부 해상도, 반사 해상도와 그림자 사용을 조절합니다. **자동 동적 해상도, 도시의 다단계 LOD, KTX2 파이프라인, GPU FFT, 실제 차량·열차 시뮬레이션은 구현하지 않았습니다.**
+화질은 내부 해상도와 그림자 사용을 조절하며, 모바일에서는 수면 격자와 반사 해상도도 조절합니다. **자동 동적 해상도, 도시의 다단계 LOD, KTX2 파이프라인, GPU FFT, 실제 차량·열차 시뮬레이션은 구현하지 않았습니다.**
+
+모바일 브라우저에서는 수목을 공간별로 묶어 화면 밖 수목의 렌더링을 건너뛰고, 낮음·균형 화질의 수면 격자와 반사 타깃을 줄입니다. PC의 기존 지오메트리·해상도·반사 설정은 유지합니다. 적용 범위, 품질 차이, 측정 방법과 실기기 검증 한계는 [모바일 성능 보고서](docs/MOBILE-PERFORMANCE.md)에 기록합니다. `test:mobile`은 iOS 사용자 에이전트·터치 입력을 적용한 Chromium 기능 검사이며 실제 Safari·Edge 기기의 성능 검증은 아닙니다.
 
 ## 재현 가능한 관찰
 
@@ -73,6 +76,7 @@ Three.js 0.186.1의 `WebGPURenderer`와 TSL을 사용했습니다. 같은 노드
 | `still`    | `1`                       | FFT·구름·선박 흔들림의 장면 시간을 고정.                       |
 | `ui`       | `0`                       | UI와 비네트를 숨긴 장면 캡처                                   |
 | `rate`     | `120`                     | 최대 120배 항해 가속, 전체 항로 검증용                         |
+| `profile`  | `1`                       | CPU 구간·프레임·long task 수집과 렌더 리소스 검사 API 활성화   |
 
 `window.__HAN_RIVER__`는 검증용 상태·측정값과 시점·시간대 제어를 제공합니다. 프레임 시간은 CPU 애니메이션 콜백 간격이며 GPU timestamp 측정값이 아닙니다. 초기 로딩과 첫 프레임까지의 시간은 별도 기록합니다.
 

@@ -15,10 +15,14 @@ import {
   advanceVoyage,
 } from './route.js';
 import { icon, hydrateIcons } from './icons.js';
+import { createProfiler } from './profiling.js';
+import { isMobileBrowser } from './render-policy.js';
 
 hydrateIcons();
 const $ = (id) => document.getElementById(id),
   params = new URLSearchParams(location.search);
+const profiler = params.has('profile') ? createProfiler() : null;
+const mobileRenderer = isMobileBrowser(navigator);
 const audio = new RiverAudio(),
   stored = (() => {
     try {
@@ -105,12 +109,17 @@ window.__HAN_RIVER__ = {
     playing: state.playing,
     elapsed: state.elapsed,
     speed: state.speed,
+    renderMode: mobileRenderer ? 'mobile' : 'desktop',
     progress: progressAt(state.elapsed),
     location: nearestStop(progressAt(state.elapsed)).name,
     position: routePoint(progressAt(state.elapsed)),
     ...stats,
   }),
 };
+if (profiler) {
+  window.__HAN_RIVER__.profile = profiler;
+  window.__HAN_RIVER__.inspect = () => ({ renderer, river, world, sky, boat });
+}
 function toast(message) {
   $('toast').textContent = message;
   $('toast').classList.add('show');
@@ -311,6 +320,7 @@ function animate(milliseconds) {
     actualDt = previous ? now - previous : 0,
     dt = Math.min(actualDt, 0.5);
   previous = now;
+  profiler?.begin(actualDt * 1000);
   if (!params.has('still')) state.time += dt;
   if (state.playing) {
     state.elapsed = advanceVoyage(state.elapsed, actualDt * diagnosticRate, state.speed);
@@ -350,17 +360,21 @@ function animate(milliseconds) {
   target.copy(camera.position).add(direction);
   camera.lookAt(target);
   $('compass-needle').style.transform = `rotate(${((state.yaw + Math.PI / 2) * 180) / Math.PI}deg)`;
+  profiler?.mark('sceneCpuMs');
   river.update(state.time, point, moving);
+  profiler?.mark('riverCpuMs');
   world.update(state.time);
   audio.update(moving);
   sunLight.target.position.set(point.x, 0, point.z);
   sunLight.target.updateMatrixWorld();
   sunLight.position.copy(river.sun.value).multiplyScalar(1700).add(sunLight.target.position);
   if (frameCount % 12 === 0) updateHUD();
-  const start = performance.now();
+  profiler?.mark('otherUpdateCpuMs');
   renderer.render(scene, camera);
+  profiler?.mark('renderSubmitCpuMs');
   stats.drawCalls = renderer.info.render.drawCalls;
   stats.triangles = renderer.info.render.triangles;
+  profiler?.end(stats.drawCalls, stats.triangles);
   stats.frames++;
   if (dt > 0 && state.ready) {
     state.frames.push(actualDt * 1000);
@@ -409,7 +423,7 @@ async function init() {
       error('그래픽 장치 연결이 끊어졌어요. 다른 그래픽 앱을 종료한 뒤 다시 시도해 주세요.');
     loading(24, '강변과 서울의 실루엣을 만들고 있어요');
     await new Promise((r) => setTimeout(r, 0));
-    world = createWorld(scene);
+    world = createWorld(scene, { mobile: mobileRenderer });
     boat = createBoat(scene);
     sky = new SkyMesh();
     sky.scale.setScalar(18000);
@@ -430,7 +444,7 @@ async function init() {
     sunLight.shadow.bias = -0.0005;
     scene.add(sunLight, sunLight.target);
     loading(45, '잔물결과 도시의 반사를 계산하고 있어요');
-    river = await createRiver();
+    river = await createRiver({ mobile: mobileRenderer, quality: state.quality });
     scene.add(river.mesh);
     // PMREM uses the same physical sky as the reflected environment.
     pmrem = new THREE.PMREMGenerator(renderer);
@@ -445,9 +459,22 @@ async function init() {
     camera.position.set(point.x + 11, 4.85, point.z);
     camera.lookAt(point.x + Math.cos(state.yaw) * 100, 7, point.z + Math.sin(state.yaw) * 100);
     loading(72, '마지막으로 한강의 빛을 맞추고 있어요');
-    await renderer.compileAsync(scene, camera);
-    animate(0);
-    if (renderer.backend.isWebGPUBackend) await renderer.backend.device.queue.onSubmittedWorkDone();
+    // Prepare mobile cell bindings/pipelines during loading, including reflection.
+    // Desktop has no cells and follows the original preparation path.
+    for (const cell of world.treeCells) cell.frustumCulled = false;
+    try {
+      await renderer.compileAsync(
+        scene,
+        camera,
+        null,
+        mobileRenderer ? (e) => loading(72 + (e.loaded / e.total) * 23) : null,
+      );
+      animate(0);
+      if (renderer.backend.isWebGPUBackend)
+        await renderer.backend.device.queue.onSubmittedWorkDone();
+    } finally {
+      for (const cell of world.treeCells) cell.frustumCulled = true;
+    }
     loading(100, '당신의 자리가 준비되었어요');
     stats.loadMs = performance.now() - start;
     state.ready = true;
